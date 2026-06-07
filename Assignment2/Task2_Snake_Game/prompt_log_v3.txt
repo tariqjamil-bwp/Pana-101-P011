@@ -1,0 +1,11 @@
+=== PROMPT ITERATION 3 ===
+Model: DeepSeek V3.2
+Changes requested:
+1. P key to pause/unpause
+2. Mobile touch/swipe controls
+3. Wall wrapping mode
+4. Subtle grid pattern on canvas
+5. Ensure Space restart works
+6. Sound effects via Web Audio API (eat beep, game over tone)
+
+Output: snake_v3.html
