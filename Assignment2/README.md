@@ -11,8 +11,7 @@
 ```
 Assignment2/
 ├── Task1_Prompting_Report/
-│   ├── exercise_results.md     # 13 prompting exercises with observations
-│   └── run_exercises.py        # Script used for API-based exercises
+│   └── exercise_results.md     # 13 prompting exercises with observations
 │
 ├── Task2_Snake_Game/
 │   ├── index.html              # Final deployed game (GitHub Pages)
@@ -30,6 +29,9 @@ Assignment2/
 │   └── transcript.txt          # Raw YouTube transcript
 │
 └── README.md                   # This file
+
+codes/                          # Auxiliary scripts (outside Assignment2)
+└── run_exercises.py            # Script used for API-based exercises
 ```
 
 ---
