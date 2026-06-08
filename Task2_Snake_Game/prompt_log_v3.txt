@@ -1,0 +1,38 @@
+=== PROMPT ITERATION 3 ===
+Model: DeepSeek V3.2
+Changes requested:
+1. P key to pause/unpause
+2. Mobile touch/swipe controls
+3. Wall wrapping mode
+4. Subtle grid pattern on canvas
+5. Ensure Space restart works
+6. Sound effects via Web Audio API (eat beep, game over tone)
+
+Output: snake_v3.html
+
+
+
+=== ITERATION 4 — Professional Redesign (Built with opencode) ===
+After reviewing the three AI-generated versions, the output was too simplistic and "kiddish" for a professional portfolio. Instead of further prompting, the game was completely rewritten from scratch with a modern design.
+
+Design goals:
+- Glassmorphism (translucent panels, backdrop blur, subtle borders)
+- Gradient background (dark purple/blue space feel)
+- 3 lives system with heart icons
+- Particle burst effects (on eat and on death)
+- Gradient snake body transitioning from blue to teal
+- Head with glow effect and white eyes with pupils
+- Golden food with radial gradient glow
+- WASD + Arrow key controls
+- On-screen D-pad for mobile
+- Swipe gesture support
+- Web Audio API sounds (eat double-beep, life-lost triangle tone, death sawtooth)
+- localStorage high score persistence
+- Pause overlay
+- Game over modal with stats (score, best, speed)
+- Animated mouth on snake head while eating
+- Run/Stop toggle button with snake SVG icon
+- Responsive canvas with aspect-ratio
+- No external dependencies
+
+Output: index.html (final deployed version)
