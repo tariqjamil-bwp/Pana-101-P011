@@ -42,9 +42,10 @@ codes/                          # Auxiliary scripts (outside Assignment2)
 |---|---|---|
 | **Task 1** | Execute 13 prompting exercises against DeepSeek V3.2 & Qwen 3 235B | `exercise_results.md` — full report with observations & conclusion |
 | **Task 2** | Build an AI-generated Snake Game through iterative prompting | `index.html` — live at [GitHub Pages](https://tariqjamil-bwp.github.io/Pana-101-P011/Assignment2/Task2_Snake_Game/) |
-| **Task 3** | Generate lecture slides from orientation video using LLMs | `index.html` — 18-slide reveal.js presentation |
+| **Task 3** | Generate lecture slides from orientation video using LLMs | `index.html` — live at [GitHub Pages](https://tariqjamil-bwp.github.io/Pana-101-P011/Assignment2/Task3_Lecture_Slides/) |
 
 ## Links
 
 - **GitHub Repo:** https://github.com/tariqjamil-bwp/Pana-101-P011
 - **Snake Game:** https://tariqjamil-bwp.github.io/Pana-101-P011/Assignment2/Task2_Snake_Game/
+- **Lecture Slides:** https://tariqjamil-bwp.github.io/Pana-101-P011/Assignment2/Task3_Lecture_Slides/
