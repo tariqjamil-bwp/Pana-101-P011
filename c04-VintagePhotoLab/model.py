@@ -8,6 +8,7 @@
 # ============================================================================
 
 import os
+import warnings
 from pathlib import Path
 
 import cv2
@@ -16,6 +17,9 @@ import torch
 import torch.nn as nn
 import requests
 from PIL import Image, ImageEnhance, ImageOps, ImageFilter as PILFilter
+
+torch.set_num_threads(1)
+warnings.filterwarnings("ignore", ".*torch.distributed.*")
 
 MODEL_DIR = Path(__file__).parent / "models"
 MODEL_DIR.mkdir(exist_ok=True)
@@ -159,19 +163,23 @@ class Colorizer:
         self.init()
         img = Image.fromarray(img_rgb).convert("RGB")
         w, h = img.size
-        # Resize to 224 for model, preserve aspect
         scale = min(224 / w, 224 / h)
         nw, nh = int(w * scale), int(h * scale)
         img_small = img.resize((nw, nh), Image.LANCZOS)
-        # Pad to 224×224
         pad_w, pad_h = 224 - nw, 224 - nh
         img_pad = Image.new("RGB", (224, 224), (0, 0, 0))
         img_pad.paste(img_small, (pad_w // 2, pad_h // 2))
 
         t = torch.from_numpy(np.array(img_pad).transpose(2, 0, 1)).float().div(255.).unsqueeze(0).to(self.device)
-        with torch.no_grad():
-            out = self.model(t).clamp(0, 1).squeeze(0).cpu().numpy().transpose(1, 2, 0)
-        # Crop back to original aspect ratio
+        if self.device.type == "cpu":
+            t = t.half()
+            with torch.no_grad():
+                m = self.model.half()
+                out = m(t).clamp(0, 1).squeeze(0).cpu().float().numpy().transpose(1, 2, 0)
+            self.model.float()
+        else:
+            with torch.no_grad():
+                out = self.model(t).clamp(0, 1).squeeze(0).cpu().numpy().transpose(1, 2, 0)
         out = out[pad_h // 2:pad_h // 2 + nh, pad_w // 2:pad_w // 2 + nw]
         return Image.fromarray((out * 255).astype(np.uint8)).resize((w, h), Image.LANCZOS)
 
@@ -196,6 +204,7 @@ class SuperResolution:
         self.upsampler = RealESRGANer(
             scale=4, model_path=path, model=model,
             tile=0, tile_pad=10, pre_pad=0, device=self.device,
+            fp16=self.device.type == "cpu",
         )
         self.ready = True
         print(f"SuperResolution ready on {self.device}")
@@ -226,6 +235,7 @@ class FaceRestoration:
         self.restorer = GFPGANer(
             model_path=path, upscale=1, arch='clean',
             channel_multiplier=2, device=self.device,
+            fp16=self.device.type == "cpu",
         )
         self.ready = True
         print(f"FaceRestoration ready on {self.device}")
