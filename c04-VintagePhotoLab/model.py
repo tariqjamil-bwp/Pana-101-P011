@@ -26,35 +26,75 @@ MODEL_DIR = _HF_DATA / "models" if _HF_DATA.is_dir() else Path(__file__).parent 
 MODEL_DIR.mkdir(parents=True, exist_ok=True)
 
 # ---------------------------------------------------------------------------
-# Remote model weight URLs (auto-downloaded on first use)
+# Remote model weight URLs (mirrors — HF Hub first, GitHub fallback)
 # ---------------------------------------------------------------------------
-MODEL_URLS = {
-    "ColorizeArtistic_gen.pth": ("https://huggingface.co/databuzzword/deoldify-artistic/resolve/main/ColorizeArtistic_gen.pth", 243 * 1024 * 1024),
-    "RealESRGAN_x4plus.pth": ("https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth", 64 * 1024 * 1024),
-    "GFPGANv1.4.pth": ("https://github.com/TencentARC/GFPGAN/releases/download/v1.3.4/GFPGANv1.4.pth", 333 * 1024 * 1024),
+MODEL_MIRRORS = {
+    "ColorizeArtistic_gen.pth": [
+        "https://huggingface.co/databuzzword/deoldify-artistic/resolve/main/ColorizeArtistic_gen.pth",
+        "https://github.com/databuzzword/deoldify-artistic/releases/download/v1.0/ColorizeArtistic_gen.pth",
+    ],
+    "RealESRGAN_x4plus.pth": [
+        "https://huggingface.co/lucataco/RealESRGAN-x4plus/resolve/main/RealESRGAN_x4plus.pth",
+        "https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth",
+    ],
+    "GFPGANv1.4.pth": [
+        "https://huggingface.co/Xintao/GFPGAN/resolve/main/GFPGANv1.4.pth",
+        "https://github.com/TencentARC/GFPGAN/releases/download/v1.3.4/GFPGANv1.4.pth",
+    ],
+}
+
+MODEL_SIZES = {
+    "ColorizeArtistic_gen.pth": 243 * 1024 * 1024,
+    "RealESRGAN_x4plus.pth": 64 * 1024 * 1024,
+    "GFPGANv1.4.pth": 333 * 1024 * 1024,
 }
 
 
 # ---------------------------------------------------------------------------
-# Weight download helper
+# Parallel model downloader
 # ---------------------------------------------------------------------------
+def _download_one(name: str, path: Path):
+    if path.exists() and path.stat().st_size > 1024:
+        return
+    mirrors = MODEL_MIRRORS.get(name, [])
+    if not mirrors:
+        raise FileNotFoundError(f"No download URL for {name}")
+    size_mb = MODEL_SIZES.get(name, 0) // 1024 // 1024
+    for url in mirrors:
+        try:
+            print(f"Downloading {name} ({size_mb} MB)...")
+            r = requests.get(url, stream=True, timeout=300)
+            r.raise_for_status()
+            tmp = path.with_suffix(".tmp")
+            with open(tmp, "wb") as f:
+                for chunk in r.iter_content(8192):
+                    f.write(chunk)
+            tmp.rename(path)
+            print(f"  {name} done")
+            return
+        except Exception as e:
+            print(f"  mirror failed: {e}")
+    raise RuntimeError(f"Failed to download {name} from all mirrors")
+
+
 def _ensure_model(name: str):
     path = MODEL_DIR / name
-    if path.exists() and path.stat().st_size > 1024:
-        return str(path)
-    url, expected = MODEL_URLS.get(name)
-    if url is None:
-        raise FileNotFoundError(f"No download URL for {name}")
-    print(f"Downloading {name} ({expected // 1024 // 1024} MB)...")
-    r = requests.get(url, stream=True, timeout=300)
-    r.raise_for_status()
-    tmp = path.with_suffix(".tmp")
-    with open(tmp, "wb") as f:
-        for chunk in r.iter_content(8192):
-            f.write(chunk)
-    tmp.rename(path)
-    print(f"  done")
+    _download_one(name, path)
     return str(path)
+
+
+def _ensure_all_models():
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+    needed = [(name, MODEL_DIR / name) for name in MODEL_MIRRORS
+              if not (MODEL_DIR / name).exists() or (MODEL_DIR / name).stat().st_size < 1024]
+    if not needed:
+        return
+    print(f"Downloading {len(needed)} models in parallel...")
+    with ThreadPoolExecutor(max_workers=len(needed)) as ex:
+        fs = {ex.submit(_download_one, name, path): name for name, path in needed}
+        for f in as_completed(fs):
+            f.result()
+    print("All models ready")
 
 
 # ============================================================================
@@ -369,6 +409,7 @@ class PhotoProcessor:
 
     def init(self):
         if not self.ready:
+            _ensure_all_models()
             self.colorizer.init()
             self.ready = True
 
