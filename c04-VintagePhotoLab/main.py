@@ -10,17 +10,11 @@
 import threading
 
 import gradio as gr
-from fastapi import FastAPI
 from model import PhotoProcessor, FILTER_CHOICES
 
 processor = PhotoProcessor()
 
-app = FastAPI(title="VintagePhotoLab")
 
-
-# ---------------------------------------------------------------------------
-# Image processing handler (called by Gradio)
-# ---------------------------------------------------------------------------
 def process_image(image, filter_name, resolution, fr_weight):
     if image is None:
         return None
@@ -34,7 +28,7 @@ css_inline = """
     .app-subtitle { text-align: center; color: #666; margin-bottom: 1.5rem; }
 """
 
-with gr.Blocks(title="VintagePhotoLab") as demo:
+with gr.Blocks(title="VintagePhotoLab", css=css_inline, theme=gr.themes.Soft()) as demo:
     gr.HTML(
         '<div class="app-title">🎨 VintagePhotoLab</div>'
         '<div class="app-subtitle">Colorize old photos &amp; apply artistic filters</div>'
@@ -103,22 +97,13 @@ with gr.Blocks(title="VintagePhotoLab") as demo:
 
     gr.HTML(
         '<div style="text-align:center;padding:1rem;color:#999;font-size:0.85rem;">'
-        "Built with FastAPI + Gradio + OpenCV</div>"
+        "Built with Gradio + OpenCV + PyTorch</div>"
     )
 
 
-app = gr.mount_gradio_app(app, demo, path="/", theme=gr.themes.Soft(), css=css_inline)
-
-
-# ---------------------------------------------------------------------------
-# Warmup: pre-load models in background on startup
-# ---------------------------------------------------------------------------
-@app.on_event("startup")
-def warmup():
-    thread = threading.Thread(target=processor.init, daemon=True)
-    thread.start()
+demo.queue()
+threading.Thread(target=processor.init, daemon=True).start()
 
 
 if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=False)
+    demo.launch(server_name="0.0.0.0", server_port=8000)
