@@ -21,8 +21,9 @@ from PIL import Image, ImageEnhance, ImageOps, ImageFilter as PILFilter
 torch.set_num_threads(1)
 warnings.filterwarnings("ignore", ".*torch.distributed.*")
 
-MODEL_DIR = Path(__file__).parent / "models"
-MODEL_DIR.mkdir(exist_ok=True)
+_HF_DATA = Path("/data")
+MODEL_DIR = _HF_DATA / "models" if _HF_DATA.is_dir() else Path(__file__).parent / "models"
+MODEL_DIR.mkdir(parents=True, exist_ok=True)
 
 # ---------------------------------------------------------------------------
 # Remote model weight URLs (auto-downloaded on first use)
