@@ -15,7 +15,7 @@ from model import PhotoProcessor, FILTER_CHOICES
 
 processor = PhotoProcessor()
 
-app = FastAPI(title="DeOldify WebApp")
+app = FastAPI(title="VintagePhotoLab")
 
 
 # ---------------------------------------------------------------------------
@@ -34,9 +34,9 @@ css_inline = """
     .app-subtitle { text-align: center; color: #666; margin-bottom: 1.5rem; }
 """
 
-with gr.Blocks(title="DeOldify WebApp") as demo:
+with gr.Blocks(title="VintagePhotoLab") as demo:
     gr.HTML(
-        '<div class="app-title">🎨 DeOldify WebApp</div>'
+        '<div class="app-title">🎨 VintagePhotoLab</div>'
         '<div class="app-subtitle">Colorize old photos &amp; apply artistic filters</div>'
     )
 

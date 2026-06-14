@@ -1,5 +1,5 @@
 ---
-title: DeOldify WebApp
+title: VintagePhotoLab
 emoji: 🎨
 colorFrom: blue
 colorTo: purple
@@ -9,7 +9,7 @@ app_file: main.py
 pinned: false
 ---
 
-# DeOldify WebApp
+# VintagePhotoLab
 
 Colorize old photos & apply artistic filters, super-resolution, and face restoration.
 
