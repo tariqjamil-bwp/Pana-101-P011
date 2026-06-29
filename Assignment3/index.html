@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tariq Jamil — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --bg:#f6f8fc;--surface:#fff;--text:#0f172a;--text2:#475569;
+      --accent:#0891b2;--accent2:#06b6d4;--border:#e2e8f0;
+      --hero1:#020617;--hero2:#0f172a;--hero3:#1e293b
+    }
+    .dark{
+      --bg:#020617;--surface:#0f172a;--text:#f1f5f9;--text2:#94a3b8;
+      --accent:#22d3ee;--accent2:#06b6d4;--border:#1e293b;
+      --hero1:#000;--hero2:#020617;--hero3:#0f172a
+    }
+    html{scroll-behavior:smooth}
+    body{
+      font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      line-height:1.7;color:var(--text);background:var(--bg);
+      transition:background .3s,color .3s
+    }
+    .container{max-width:800px;margin:0 auto;padding:0 24px}
+
+    /* scroll progress */
+    #progress{
+      position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));
+      z-index:999;transition:width .1s
+    }
+
+    /* theme toggle */
+    .theme-toggle{
+      position:fixed;top:20px;right:20px;z-index:100;
+      width:44px;height:44px;border-radius:14px;
+      background:var(--surface);border:1px solid var(--border);
+      cursor:pointer;font-size:1.2rem;
+      display:flex;align-items:center;justify-content:center;
+      transition:all .25s;color:var(--text);
+      box-shadow:0 4px 16px rgba(0,0,0,.08);backdrop-filter:blur(8px)
+    }
+    .theme-toggle:hover{transform:scale(1.12) rotate(15deg)}
+
+    /* hero */
+    header{
+      background:linear-gradient(135deg,var(--hero1),var(--hero2),var(--hero3));
+      color:#fff;padding:80px 0 60px;text-align:center;
+      position:relative;overflow:hidden
+    }
+    header .mesh{
+      position:absolute;inset:0;
+      background:
+        radial-gradient(ellipse 600px 300px at 20% 50%,rgba(8,145,178,.12),transparent),
+        radial-gradient(ellipse 500px 400px at 80% 30%,rgba(6,182,212,.08),transparent),
+        radial-gradient(ellipse 400px 300px at 50% 80%,rgba(8,145,178,.06),transparent);
+      animation:meshDrift 16s ease-in-out infinite alternate
+    }
+    @keyframes meshDrift{
+      0%{transform:translate(0,0) rotate(0)}
+      100%{transform:translate(-1%,1%) rotate(2deg)}
+    }
+    header .wave{
+      position:absolute;bottom:-2px;left:0;right:0;height:48px;
+      background:var(--bg);border-radius:50% 50% 0 0;
+      transition:background .3s
+    }
+    header .container{position:relative;z-index:1}
+    .avatar{
+      width:104px;height:104px;border-radius:50%;
+      background:linear-gradient(135deg,var(--accent2),var(--accent));
+      margin:0 auto 18px;display:flex;align-items:center;justify-content:center;
+      font-size:2.4rem;font-weight:800;color:#fff;
+      box-shadow:0 0 0 4px rgba(6,182,212,.25),0 8px 32px rgba(6,182,212,.25);
+      animation:avatarPulse 3s ease-in-out infinite
+    }
+    @keyframes avatarPulse{
+      0%,100%{box-shadow:0 0 0 4px rgba(6,182,212,.25),0 8px 32px rgba(6,182,212,.25)}
+      50%{box-shadow:0 0 0 8px rgba(6,182,212,.15),0 8px 48px rgba(6,182,212,.35)}
+    }
+    header h1{font-size:2.4rem;font-weight:800;letter-spacing:-.03em;margin-bottom:6px}
+    .subtitle{font-size:1.05rem;color:#94a3b8;min-height:1.8em}
+    .subtitle .cursor{display:inline-block;width:2px;height:1.1em;background:#94a3b8;margin-left:3px;vertical-align:text-bottom;animation:blink .8s step-end infinite}
+    @keyframes blink{50%{opacity:0}}
+
+    /* stats bar */
+    .stats{
+      display:flex;justify-content:center;gap:40px;margin-top:28px;
+      flex-wrap:wrap
+    }
+    .stat-item{text-align:center}
+    .stat-num{font-size:1.6rem;font-weight:800;color:var(--accent2);line-height:1}
+    .stat-label{font-size:.78rem;color:#94a3b8;margin-top:4px;text-transform:uppercase;letter-spacing:.05em}
+
+    /* sections */
+    section{
+      background:var(--surface);margin:28px 0;border-radius:20px;
+      padding:40px;box-shadow:0 1px 4px rgba(0,0,0,.04);
+      border:1px solid var(--border);
+      transition:background .3s,border-color .3s,transform .25s,box-shadow .25s
+    }
+    section:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.06)}
+    h2{
+      font-size:1.2rem;font-weight:700;margin-bottom:22px;color:var(--text);
+      display:flex;align-items:center;gap:10px
+    }
+    h2 .badge{
+      width:28px;height:28px;border-radius:8px;
+      background:linear-gradient(135deg,var(--accent2),var(--accent));
+      color:#fff;display:inline-flex;align-items:center;justify-content:center;
+      font-size:.8rem;flex-shrink:0
+    }
+
+    /* about */
+    .about-text{color:var(--text2);font-size:.95rem;line-height:1.8}
+
+    /* skills */
+    .skill-group{margin-bottom:22px}
+    .skill-group:last-child{margin-bottom:0}
+    .sg-header{
+      display:flex;align-items:center;gap:10px;margin-bottom:10px;
+      font-weight:600;font-size:.86rem;color:var(--text)
+    }
+    .sg-icon{
+      width:28px;height:28px;border-radius:7px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:.8rem;flex-shrink:0
+    }
+    .sg-icon.i1{background:rgba(6,182,212,.12)}.sg-icon.i2{background:rgba(168,85,247,.12)}
+    .sg-icon.i3{background:rgba(34,197,94,.12)}.sg-icon.i4{background:rgba(249,115,22,.12)}
+    .sg-icon.i5{background:rgba(236,72,153,.12)}
+    .s-grid{display:flex;flex-wrap:wrap;gap:6px}
+    .stag{
+      padding:5px 13px;border-radius:20px;font-size:.82rem;
+      background:var(--bg);border:1px solid var(--border);
+      color:var(--text);cursor:default;transition:all .2s
+    }
+    .stag:hover{
+      background:var(--accent);color:#fff;border-color:var(--accent);
+      transform:translateY(-2px)
+    }
+
+    /* project accordion */
+    .proj-acc{margin-top:4px}
+    .acc-item{border:1px solid var(--border);border-radius:14px;margin-bottom:10px;overflow:hidden;background:var(--bg);transition:all .25s}
+    .acc-item:hover{border-color:var(--accent)}
+    .acc-header{
+      display:flex;align-items:center;gap:12px;padding:14px 18px;
+      cursor:pointer;user-select:none;transition:background .2s;position:relative
+    }
+    .acc-header:hover{background:rgba(8,145,178,.04)}
+    .acc-header:active{transform:scale(.995)}
+    .acc-ico{
+      width:32px;height:32px;border-radius:9px;display:flex;
+      align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0
+    }
+    .acc-ico.c1{background:rgba(6,182,212,.15)}
+    .acc-ico.c2{background:rgba(168,85,247,.15)}
+    .acc-ico.c3{background:rgba(34,197,94,.15)}
+    .acc-ico.c4{background:rgba(249,115,22,.15)}
+    .acc-ico.c5{background:rgba(236,72,153,.15)}
+    .acc-label{font-weight:600;font-size:.88rem;color:var(--text);flex:1}
+    .acc-count{font-size:.72rem;color:var(--text2);background:var(--surface);padding:2px 10px;border-radius:10px;border:1px solid var(--border)}
+    .acc-arrow{font-size:.7rem;color:var(--text2);transition:transform .3s;flex-shrink:0}
+    .acc-item.open .acc-arrow{transform:rotate(180deg)}
+    .acc-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+    .acc-inner{padding:0 18px 16px;display:grid;gap:10px}
+    .acc-card{
+      padding:14px 16px;border-radius:10px;
+      background:var(--surface);border:1px solid var(--border);
+      transition:all .2s
+    }
+    .acc-card:hover{border-color:var(--accent);transform:translateY(-1px)}
+    .acc-card .title{font-weight:600;font-size:.88rem;color:var(--text);margin-bottom:3px}
+    .acc-card .desc{font-size:.8rem;color:var(--text2);margin-bottom:6px;line-height:1.5}
+    .acc-card .tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px}
+    .acc-card .tags span{padding:1px 9px;border-radius:10px;font-size:.7rem;background:var(--bg);border:1px solid var(--border);color:var(--text2)}
+    .acc-card .lnk{font-size:.78rem;color:var(--accent);text-decoration:none;font-weight:500}
+    .acc-card .lnk:hover{text-decoration:underline}
+
+    /* publications */
+    .pub-grid{display:grid;gap:14px}
+    .pub-card{
+      padding:18px 20px;border-radius:12px;
+      background:var(--bg);border:1px solid var(--border);
+      transition:all .25s;display:flex;gap:14px;align-items:flex-start
+    }
+    .pub-card:hover{
+      border-color:var(--accent);transform:translateY(-2px)
+    }
+    .pub-icon{
+      width:36px;height:36px;border-radius:10px;
+      background:linear-gradient(135deg,var(--accent2),var(--accent));
+      color:#fff;display:flex;align-items:center;justify-content:center;
+      font-size:.85rem;flex-shrink:0;margin-top:2px
+    }
+    .pub-info{flex:1}
+    .pub-title{font-weight:600;font-size:.9rem;color:var(--text)}
+    .pub-meta{font-size:.78rem;color:var(--text2);margin-top:2px}
+    .pub-link{
+      font-size:.8rem;color:var(--accent);text-decoration:none;font-weight:500;
+      display:inline-block;margin-top:4px
+    }
+    .pub-link:hover{text-decoration:underline}
+
+    /* interests */
+    .int-grid{display:flex;flex-wrap:wrap;gap:12px}
+    .int-card{
+      display:flex;align-items:center;gap:10px;
+      padding:12px 18px;border-radius:12px;font-size:.86rem;
+      background:var(--bg);border:1px solid var(--border);
+      color:var(--text);transition:all .25s;
+      flex:1 1 140px;min-width:120px
+    }
+    .int-card:hover{
+      border-color:var(--accent);transform:translateY(-2px);
+      box-shadow:0 4px 16px rgba(0,0,0,.04)
+    }
+    .int-ico{
+      width:34px;height:34px;border-radius:9px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:.9rem;flex-shrink:0
+    }
+    .int-ico.c1{background:rgba(59,130,246,.12)}
+    .int-ico.c2{background:rgba(168,85,247,.12)}
+    .int-ico.c3{background:rgba(34,197,94,.12)}
+    .int-ico.c4{background:rgba(249,115,22,.12)}
+    .int-ico.c5{background:rgba(236,72,153,.12)}
+
+    /* contact */
+    .contact-list{list-style:none;padding:0}
+    .contact-list li{padding:5px 0;color:var(--text2);font-size:.92rem;display:flex;align-items:center;gap:10px}
+    .contact-list li::before{content:'▹';color:var(--accent);font-weight:700}
+    .contact-list a{color:var(--accent);text-decoration:none}
+    .contact-list a:hover{text-decoration:underline}
+
+    /* music player */
+    #musicBtn{
+      position:fixed;bottom:20px;left:20px;z-index:100;
+      width:44px;height:44px;border-radius:14px;
+      background:var(--surface);border:1px solid var(--border);
+      cursor:pointer;font-size:1.1rem;
+      display:flex;align-items:center;justify-content:center;
+      transition:all .3s;color:var(--text);
+      box-shadow:0 4px 16px rgba(0,0,0,.08);backdrop-filter:blur(8px)
+    }
+    #musicBtn:hover{transform:scale(1.1);border-color:var(--accent)}
+    #musicBtn.playing{background:var(--accent);color:#fff;border-color:var(--accent)}
+    #musicPanel{
+      position:fixed;bottom:72px;left:20px;z-index:100;
+      width:220px;background:var(--surface);border:1px solid var(--border);
+      border-radius:16px;padding:14px 16px;
+      box-shadow:0 8px 32px rgba(0,0,0,.1);backdrop-filter:blur(12px);
+      display:none;transition:all .3s
+    }
+    #musicPanel.show{display:block;animation:slideUp .3s ease}
+    @keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    #musicPanel .track{margin-bottom:8px}
+    #musicPanel .track-name{font-size:.78rem;font-weight:600;color:var(--text)}
+    #musicPanel .track-artist{font-size:.68rem;color:var(--text2)}
+    #musicPanel .controls{display:flex;align-items:center;gap:10px}
+    #musicPanel .controls button{
+      width:32px;height:32px;border-radius:8px;border:1px solid var(--border);
+      background:var(--bg);cursor:pointer;font-size:.8rem;
+      display:flex;align-items:center;justify-content:center;
+      transition:all .2s;color:var(--text)
+    }
+    #musicPanel .controls button:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+    #musicPanel .progress{
+      flex:1;height:4px;border-radius:2px;background:var(--border);
+      position:relative;cursor:pointer
+    }
+    #musicPanel .progress .fill{
+      height:100%;border-radius:2px;background:linear-gradient(90deg,var(--accent2),var(--accent));
+      width:0;transition:width .2s
+    }
+    #musicPanel .vol{
+      display:flex;align-items:center;gap:6px;margin-top:8px
+    }
+    #musicPanel .vol input{
+      flex:1;height:3px;-webkit-appearance:none;appearance:none;
+      background:var(--border);border-radius:2px;outline:none
+    }
+    #musicPanel .vol input::-webkit-slider-thumb{
+      -webkit-appearance:none;width:12px;height:12px;border-radius:50%;
+      background:var(--accent);cursor:pointer;border:none
+    }
+    #musicPanel .vol-icon{font-size:.65rem;color:var(--text2);width:16px;text-align:center}
+
+    /* footer */
+    footer{text-align:center;padding:36px 0 48px;color:var(--text2);font-size:.8rem}
+
+    /* animations */
+    .rv{opacity:0;transform:translateY(30px);transition:opacity .6s ease-out,transform .6s ease-out}
+    .rv.show{opacity:1;transform:translateY(0)}
+
+    @media(max-width:600px){
+      header{padding:56px 0 40px}
+      header h1{font-size:1.6rem}
+      .avatar{width:80px;height:80px;font-size:1.8rem}
+      .stats{gap:24px}
+      .stat-num{font-size:1.3rem}
+      section{padding:24px 18px;margin:16px 0;border-radius:14px}
+      .pub-card{flex-direction:column;gap:8px}
+      .theme-toggle{top:12px;right:12px;width:38px;height:38px;font-size:1rem}
+      .int-card{flex:1 1 100%}
+      #musicBtn{bottom:12px;left:12px;width:38px;height:38px;font-size:1rem}
+      #musicPanel{left:12px;bottom:58px;width:200px}
+    }
+  </style>
+</head>
+<body>
+
+<div id="progress"></div>
+<button class="theme-toggle" id="themeToggle">🌙</button>
+
+<audio id="bgMusic" src="https://www.thesufi.com/wd-nusrat-fateh-ali/Ustad-Nusrat-Fateh-Ali-Khan-3-Dayar-e-Ishq-Mein-Apna-Maqam-Paida-Kar.mp3" preload="metadata" loop></audio>
+
+<button id="musicBtn" title="Play Kalam-e-Iqbal">🎵</button>
+<div id="musicPanel">
+  <div class="track">
+    <div class="track-name">Dayar-e-Ishq</div>
+    <div class="track-artist">Allama Iqbal · Nusrat Fateh Ali Khan</div>
+  </div>
+  <div class="controls">
+    <button id="playBtn">▶</button>
+    <div class="progress" id="progressBar"><div class="fill" id="progressFill"></div></div>
+    <button id="nextBtn">⏭</button>
+  </div>
+  <div class="vol">
+    <span class="vol-icon">🔉</span>
+    <input type="range" id="volSlider" min="0" max="1" step="0.05" value="0.1">
+  </div>
+</div>
+
+<header>
+  <div class="mesh"></div>
+  <div class="wave"></div>
+  <div class="container">
+    <div class="avatar">TJ</div>
+    <h1>Tariq Jamil</h1>
+    <p class="subtitle" id="typed"></p>
+    <div class="stats">
+      <div class="stat-item"><div class="stat-num">30+</div><div class="stat-label">Projects</div></div>
+      <div class="stat-item"><div class="stat-num">40+</div><div class="stat-label">Clients</div></div>
+      <div class="stat-item"><div class="stat-num">4</div><div class="stat-label">Years AI</div></div>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- About -->
+  <section class="rv">
+    <h2><span class="badge">👤</span> About me</h2>
+    <p class="about-text">I'm an AI/ML Engineer based in Karachi, Pakistan, specializing in building production AI systems across Agentic AI, Computer Vision, and NLP. I lead TensorDot Solutions, with a specialty in guiding research projects for PhD scholars and developing AI solutions for diverse clients.</p>
+    <p class="about-text">My work spans the full stack — from training custom vision models (YOLO, Mask R-CNN, Vision Transformers) and building LLM agents & RAG pipelines (LangChain, LlamaIndex, CrewAI, Google ADK) to deploying scalable pipelines for multi-model benchmarking. I'm the author of the <strong>AI in Aviation</strong> newsletter, and co-authored <strong>LinAlg-Bench</strong> (NeurIPS 2026) — a diagnostic benchmark for LLM mathematical reasoning. I'm passionate about bridging research and real-world impact, particularly in EdTech, aviation, and healthcare.</p>
+  </section>
+
+  <!-- Skills -->
+  <section class="rv">
+    <h2><span class="badge">⚡</span> Skills</h2>
+    <div class="skill-group">
+      <div class="sg-header"><div class="sg-icon i1">🔗</div> Agentic AI &amp; RAG</div>
+      <div class="s-grid">
+        <span class="stag">LangChain</span><span class="stag">LlamaIndex</span>
+        <span class="stag">Vector Databases</span><span class="stag">OpenAI Agent SDK</span>
+        <span class="stag">CrewAI</span><span class="stag">Google ADK</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="sg-header"><div class="sg-icon i2">👁️</div> Computer Vision</div>
+      <div class="s-grid">
+        <span class="stag">YOLO</span><span class="stag">Mask R-CNN</span><span class="stag">OpenCV</span>
+        <span class="stag">Vision Transformers</span><span class="stag">Swin Transformer</span>
+        <span class="stag">MediaPipe</span><span class="stag">DeepSORT</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="sg-header"><div class="sg-icon i3">💬</div> LLMs &amp; NLP</div>
+      <div class="s-grid">
+        <span class="stag">LLM Fine-tuning</span><span class="stag">Hugging Face</span>
+        <span class="stag">BERT</span><span class="stag">AraBERT</span><span class="stag">SpaCy</span>
+        <span class="stag">Whisper</span><span class="stag">Prompt Engineering</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="sg-header"><div class="sg-icon i4">🧠</div> Deep Learning</div>
+      <div class="s-grid">
+        <span class="stag">PyTorch</span><span class="stag">TensorFlow</span><span class="stag">Keras</span>
+        <span class="stag">Scikit-Learn</span><span class="stag">Spiking NNs</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="sg-header"><div class="sg-icon i5">🛠️</div> Languages &amp; Tools</div>
+      <div class="s-grid">
+        <span class="stag">Python</span><span class="stag">Streamlit</span><span class="stag">Gradio</span>
+        <span class="stag">Flask</span><span class="stag">Docker</span><span class="stag">SQL</span>
+        <span class="stag">Power BI</span><span class="stag">C++</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section class="rv">
+    <h2><span class="badge">📁</span> Projects</h2>
+    <div class="proj-acc">
+
+      <!-- Agentic AI & RAG -->
+      <div class="acc-item open">
+        <div class="acc-header" data-target="acc1">
+          <div class="acc-ico c1">🤖</div>
+          <span class="acc-label">Agentic AI &amp; RAG</span>
+          <span class="acc-count">4</span>
+          <span class="acc-arrow">▼</span>
+        </div>
+        <div class="acc-body" id="acc1">
+          <div class="acc-inner">
+            <div class="acc-card">
+              <div class="title">AI in EdTech — GradeAnt</div>
+              <div class="desc">AI-powered grading assistant helping educators provide consistent feedback at scale. Built with LLMs, RAG, and OCR.</div>
+              <div class="tags"><span>LLM</span><span>RAG</span><span>OCR</span></div>
+              <a class="lnk" href="http://grade-ant.com/resoures/about.html" target="_blank">View project →</a>
+            </div>
+            <div class="acc-card">
+              <div class="title">Abu Dhabi Open Data Intelligence</div>
+              <div class="desc">Voice-enabled analytical chatbot using Falcon LLM and LangChain for querying open datasets with auto-visualization.</div>
+              <div class="tags"><span>Falcon LLM</span><span>LangChain</span><span>GCP</span></div>
+              <a class="lnk" href="https://www.omdena.com/projects/abu-dhabi-open-data-intelligence-empowering-analytics-with-falcon-llm-voice-bot" target="_blank">View project →</a>
+            </div>
+            <div class="acc-card">
+              <div class="title">Legal Document QA (RAG)</div>
+              <div class="desc">Document QA system using LlamaIndex RAG pipeline for legal document retrieval and question answering.</div>
+              <div class="tags"><span>LlamaIndex</span><span>RAG</span><span>Streamlit</span></div>
+            </div>
+            <div class="acc-card">
+              <div class="title">Medical Document RAG — DRHASSAN</div>
+              <div class="desc">Medical domain RAG system for document QA across healthcare literature and clinical documents.</div>
+              <div class="tags"><span>RAG</span><span>Vector DB</span><span>Healthcare</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Computer Vision -->
+      <div class="acc-item">
+        <div class="acc-header" data-target="acc2">
+          <div class="acc-ico c2">👁️</div>
+          <span class="acc-label">Computer Vision</span>
+          <span class="acc-count">6</span>
+          <span class="acc-arrow">▼</span>
+        </div>
+        <div class="acc-body" id="acc2">
+          <div class="acc-inner">
+            <div class="acc-card">
+              <div class="title">MyCover Vehicle Inspection System</div>
+              <div class="desc">Insurance AI for vehicle damage detection with severity estimation, repair costing, and geo-tagged fraud prevention.</div>
+              <div class="tags"><span>Classification</span><span>OpenCV</span></div>
+              <a class="lnk" href="https://mycover.ai/solutions/inspection/" target="_blank">View project →</a>
+            </div>
+            <div class="acc-card">
+              <div class="title">CCTV Motion Detection</div>
+              <div class="desc">YOLOv8-based motion detection and surveillance with Flask backend, production-ready.</div>
+              <div class="tags"><span>YOLOv8</span><span>Flask</span><span>Streamlit</span></div>
+            </div>
+            <div class="acc-card">
+              <div class="title">Hepatocellular Carcinoma Detection</div>
+              <div class="desc">AI for liver cancer detection using Mask R-CNN with Explainable AI, developed for Omdena Saudi Arabia.</div>
+              <div class="tags"><span>Mask R-CNN</span><span>PyTorch</span><span>XAI</span></div>
+            </div>
+            <div class="acc-card">
+              <div class="title">Deepfake Video Detection</div>
+              <div class="desc">SyncNet-based deepfake detection via audio-video sync analysis to identify manipulated content.</div>
+              <div class="tags"><span>SyncNet</span><span>PyTorch</span><span>Audio Analysis</span></div>
+            </div>
+            <div class="acc-card">
+              <div class="title">Brain Tumor Classification</div>
+              <div class="desc">MRI-based brain tumor classification (glioma, meningioma, pituitary) using TensorFlow with Streamlit interface.</div>
+              <div class="tags"><span>TensorFlow</span><span>Streamlit</span><span>Medical Imaging</span></div>
+            </div>
+            <div class="acc-card">
+              <div class="title">Skeleton Action Recognition</div>
+              <div class="desc">Multi-architecture action recognition (LSTM, GRU, Transformer, VIVIT) using MediaPipe pose extraction.</div>
+              <div class="tags"><span>LSTM/GRU</span><span>Transformer</span><span>MediaPipe</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LLM & NLP -->
+      <div class="acc-item">
+        <div class="acc-header" data-target="acc3">
+          <div class="acc-ico c3">💬</div>
+          <span class="acc-label">LLMs &amp; NLP</span>
+          <span class="acc-count">6</span>
+          <span class="acc-arrow">▼</span>
+        </div>
+        <div class="acc-body" id="acc3">
+          <div class="acc-inner">
+            <div class="acc-card">
+              <div class="title">LLM Benchmarking Research Pipeline</div>
+              <div class="desc">Production pipeline for collecting and verifying responses from 8+ LLMs (OpenAI, Claude, DeepSeek, Qwen) on mathematical reasoning benchmarks.</div>
+              <div class="tags"><span>OpenAI</span><span>Claude</span><span>Qwen</span><span>Automation</span></div>
+              <a class="lnk" href="https://github.com/tariqjamil-bwp/LLM-Benchmarking-Research" target="_blank">View on GitHub →</a>
+            </div>
+            <div class="acc-card">
+              <div class="title">Arabic NER System</div>
+              <div class="desc">Named entity recognition combining AraBERT and LLM Agents for Arabic document processing with multi-LLM evaluation framework.</div>
+              <div class="tags"><span>AraBERT</span><span>LLM Agents</span><span>E5</span></div>
+            </div>
+            <div class="acc-card">
+              <div class="title">AI Content Detection</div>
+              <div class="desc">ML model to detect AI-generated vs human-written text using Random Forest with Streamlit UI and REST API.</div>
+              <div class="tags"><span>Random Forest</span><span>Streamlit</span><span>REST API</span></div>
+            </div>
+            <div class="acc-card">
+              <div class="title">Customer Service Chatbot</div>
+              <div class="desc">Deep learning chatbot using Falcon LLM with fine-tuning, developed as post-graduate capstone project.</div>
+              <div class="tags"><span>Falcon LLM</span><span>Fine-tuning</span></div>
+            </div>
+            <div class="acc-card">
+              <div class="title">Hate Speech Detection</div>
+              <div class="desc">RNN-based hate speech classification using LSTM/GRU with GloVe embeddings on Twitter dataset.</div>
+              <div class="tags"><span>LSTM/GRU</span><span>GloVe</span><span>Keras</span></div>
+            </div>
+            <div class="acc-card">
+              <div class="title">Audio Deepfake Detection</div>
+              <div class="desc">Deepfake audio detection using LFCC/MFCC features with shallow CNN and LSTM architectures.</div>
+              <div class="tags"><span>PyTorch</span><span>LFCC/MFCC</span><span>LSTM</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Core ML & Data Science -->
+      <div class="acc-item">
+        <div class="acc-header" data-target="acc4">
+          <div class="acc-ico c4">📊</div>
+          <span class="acc-label">Core ML &amp; Data Science</span>
+          <span class="acc-count">4</span>
+          <span class="acc-arrow">▼</span>
+        </div>
+        <div class="acc-body" id="acc4">
+          <div class="acc-inner">
+            <div class="acc-card">
+              <div class="title">Asphaltenes Stability Prediction</div>
+              <div class="desc">ML models (Extra Trees, Random Forest, GBM, KNN) for predicting asphaltene stability in crude oils using SARA composition data.</div>
+              <div class="tags"><span>Extra Trees</span><span>GBM</span><span>Petroleum</span></div>
+              <a class="lnk" href="https://doi.org/10.1016/j.molliq.2025.128535" target="_blank">View paper →</a>
+            </div>
+            <div class="acc-card">
+              <div class="title">UK Fire Station Incident Analysis</div>
+              <div class="desc">Power BI dashboard analyzing UK fire station incident data with cost impact assessment and resource optimization insights.</div>
+              <div class="tags"><span>Power BI</span><span>Data Analytics</span><span>Excel</span></div>
+            </div>
+            <div class="acc-card">
+              <div class="title">Business Intelligence Solutions</div>
+              <div class="desc">Data visualization and analytics dashboards delivering real-time business insights for UK clients.</div>
+              <div class="tags"><span>Power BI</span><span>SQL</span><span>Visualization</span></div>
+            </div>
+            <div class="acc-card">
+              <div class="title">Image Super Resolution</div>
+              <div class="desc">OpenCV DNN-based image super-resolution using EDSR and LapSRN models for enhancing low-resolution imagery.</div>
+              <div class="tags"><span>OpenCV</span><span>EDSR</span><span>LapSRN</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Signal Processing & Audio -->
+      <div class="acc-item">
+        <div class="acc-header" data-target="acc5">
+          <div class="acc-ico c5">🎵</div>
+          <span class="acc-label">Signal Processing &amp; Audio</span>
+          <span class="acc-count">3</span>
+          <span class="acc-arrow">▼</span>
+        </div>
+        <div class="acc-body" id="acc5">
+          <div class="acc-inner">
+            <div class="acc-card">
+              <div class="title">Audio Transcription — Whisper</div>
+              <div class="desc">OpenAI Whisper-based audio transcription for multilingual speech-to-text conversion.</div>
+              <div class="tags"><span>Whisper</span><span>Speech-to-Text</span></div>
+            </div>
+            <div class="acc-card">
+              <div class="title">Spiking Neural Networks</div>
+              <div class="desc">Advanced SNN models with FFT processing and signal analysis for temporal pattern recognition.</div>
+              <div class="tags"><span>SNN</span><span>FFT</span><span>PyTorch</span></div>
+            </div>
+            <div class="acc-card">
+              <div class="title">Audio Deepfake Detection</div>
+              <div class="desc">Classification of real vs synthetic speech using acoustic feature extraction and deep learning.</div>
+              <div class="tags"><span>MFCC</span><span>CNN</span><span>WaveRNN</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Publications -->
+  <section class="rv">
+    <h2><span class="badge">📝</span> Publications</h2>
+    <div class="pub-grid">
+
+      <div class="pub-card">
+        <div class="pub-icon">🛢️</div>
+        <div class="pub-info">
+          <div class="pub-title">Application of AI Techniques for Prediction of Asphaltenes Stability in Crude Oils</div>
+          <div class="pub-meta">Journal of Molecular Liquids · 2025 · ML for petroleum flow assurance</div>
+          <a class="pub-link" href="https://doi.org/10.1016/j.molliq.2025.128535" target="_blank">View on ScienceDirect →</a>
+        </div>
+      </div>
+
+      <div class="pub-card">
+        <div class="pub-icon">📊</div>
+        <div class="pub-info">
+          <div class="pub-title">LinAlg-Bench: A Forensic Benchmark Revealing Structural Failure Modes in LLM Mathematical Reasoning</div>
+          <div class="pub-meta">Agarwal, Rajbhar, <strong>Tariq J.</strong> · NeurIPS 2026 Eval Track · arXiv:2605.16675</div>
+          <a class="pub-link" href="https://arxiv.org/abs/2605.16675" target="_blank">View on arXiv →</a>
+        </div>
+      </div>
+
+      <div class="pub-card">
+        <div class="pub-icon">✈</div>
+        <div class="pub-info">
+          <div class="pub-title">AI in Aviation Newsletter</div>
+          <div class="pub-meta">LinkedIn · 1K+ followers · 2024–2026</div>
+          <div class="pub-meta">EASA AI Roadmap, FAA regulatory frameworks, aviation safety and AI due diligence</div>
+          <a class="pub-link" href="https://www.linkedin.com/newsletters/7008037434999357440/" target="_blank">Subscribe on LinkedIn →</a>
+        </div>
+      </div>
+
+      <div class="pub-card">
+        <div class="pub-icon">🔬</div>
+        <div class="pub-info">
+          <div class="pub-title">AI in Aviation Safety: Beyond the Hype</div>
+          <div class="pub-meta">Research article covering FAA, ICAO, and EASA frameworks for AI in aviation safety</div>
+          <a class="pub-link" href="https://www.linkedin.com/posts/tj-yazman_aviationsafety-aiinaviation-futureofflight-activity-7151739436441952256-zODb" target="_blank">View on LinkedIn →</a>
+        </div>
+      </div>
+
+      <div class="pub-card">
+        <div class="pub-icon">🎤</div>
+        <div class="pub-info">
+          <div class="pub-title">LLM Agents from Scratch — Workshop</div>
+          <div class="pub-meta">Conducted for Computer Vision Africa · October 2024</div>
+        </div>
+      </div>
+
+      <div class="pub-card">
+        <div class="pub-icon">📘</div>
+        <div class="pub-info">
+          <div class="pub-title">Technical Blog Posts — Finxter</div>
+          <div class="pub-meta">AI/ML tutorials and deep dives</div>
+          <a class="pub-link" href="https://blog.finxter.com/author/tariqjamil234234/" target="_blank">Read on Finxter →</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Currently exploring -->
+  <section class="rv">
+    <h2><span class="badge">🌱</span> Currently exploring</h2>
+    <div class="int-grid">
+      <div class="int-card"><div class="int-ico c1">🤖</div> Agentic AI workflows</div>
+      <div class="int-card"><div class="int-ico c2">🧠</div> Multimodal LLMs</div>
+      <div class="int-card"><div class="int-ico c3">🏥</div> AI in Healthcare</div>
+      <div class="int-card"><div class="int-ico c4">📚</div> EdTech innovation</div>
+      <div class="int-card"><div class="int-ico c5">⚙️</div> MLOps</div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="rv">
+    <h2><span class="badge">📫</span> Contact</h2>
+    <ul class="contact-list">
+      <li>Email: <a href="mailto:tariqjamil.bwp@gmail.com">tariqjamil.bwp@gmail.com</a></li>
+      <li>WhatsApp: <a href="https://wa.me/923331699025" target="_blank">+92-333-169-9025</a></li>
+      <li>GitHub: <a href="https://github.com/tariqjamil-bwp" target="_blank">github.com/tariqjamil-bwp</a></li>
+      <li>LinkedIn: <a href="https://www.linkedin.com/in/tj-yazman" target="_blank">linkedin.com/in/tj-yazman</a></li>
+      <li>Hugging Face: <a href="https://huggingface.co/TariqJamil" target="_blank">huggingface.co/TariqJamil</a></li>
+      <li>Karachi, Pakistan</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container">
+    <p>&copy; 2026 Tariq Jamil. Built with curiosity.</p>
+  </div>
+</footer>
+
+<script>
+  // theme toggle
+  (function(){
+    const t=document.getElementById('themeToggle');
+    if(localStorage.getItem('theme')==='dark'){document.documentElement.classList.add('dark');t.textContent='☀️'}
+    t.onclick=()=>{
+      document.documentElement.classList.toggle('dark');
+      const d=document.documentElement.classList.contains('dark');
+      t.textContent=d?'☀️':'🌙';
+      localStorage.setItem('theme',d?'dark':'light')
+    }
+  })();
+
+  // typed subtitle
+  (function(){
+    const roles=['Machine Learning Engineer','AI Curriculum Developer','Building with PyTorch, TensorFlow, Ultralytics YOLO, OpenCV, Google ADK, and more..'];
+    let ri=0,ci=0,del=false;
+    const el=document.getElementById('typed');
+    function loop(){
+      const cur=roles[ri];
+      if(!del){
+        el.innerHTML=cur.slice(0,ci+1)+'<span class="cursor"></span>';ci++;
+        if(ci===cur.length){setTimeout(()=>{del=true;loop()},2000);return}
+        setTimeout(loop,80)
+      }else{
+        el.innerHTML=cur.slice(0,ci-1)+'<span class="cursor"></span>';ci--;
+        if(ci===0){del=false;ri=(ri+1)%roles.length;setTimeout(loop,400);return}
+        setTimeout(loop,40)
+      }
+    }
+    loop()
+  })();
+
+  // scroll progress + reveal
+  (function(){
+    const p=document.getElementById('progress');
+    const els=[...document.querySelectorAll('.rv')];
+    const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('show')}})},{threshold:.12});
+    els.forEach(e=>obs.observe(e));
+    window.onscroll=()=>{const s=document.documentElement;const h=s.scrollHeight-s.clientHeight;p.style.width=(s.scrollTop/h*100)+'%'}
+  })();
+
+  // music player
+  (function(){
+    const audio=document.getElementById('bgMusic');
+    const btn=document.getElementById('musicBtn');
+    const panel=document.getElementById('musicPanel');
+    const playBtn=document.getElementById('playBtn');
+    const fill=document.getElementById('progressFill');
+    const bar=document.getElementById('progressBar');
+    const vol=document.getElementById('volSlider');
+    const nextBtn=document.getElementById('nextBtn');
+    // playlist
+    const playlist=[
+      {src:'https://www.thesufi.com/wd-nusrat-fateh-ali/Ustad-Nusrat-Fateh-Ali-Khan-3-Dayar-e-Ishq-Mein-Apna-Maqam-Paida-Kar.mp3',name:'Dayar-e-Ishq',artist:'Allama Iqbal · Nusrat Fateh Ali Khan'},
+      {src:'https://www.thesufi.com/2013_UT/April_2013/Nusrat-Fateh-Ali-Khan-Shikwa.mp3',name:'Shikwa',artist:'Allama Iqbal · Nusrat Fateh Ali Khan'}
+    ];
+    let currentTrack=0;
+    btn.onclick=()=>{
+      panel.classList.toggle('show');
+      btn.classList.toggle('active',panel.classList.contains('show'))
+    };
+    function loadTrack(i){
+      currentTrack=i;
+      audio.src=playlist[i].src;
+      audio.load();
+      document.querySelector('.track-name').textContent=playlist[i].name;
+      document.querySelector('.track-artist').textContent=playlist[i].artist;
+      if(!audio.paused){audio.play()}
+    }
+    function togglePlay(){
+      if(audio.paused){
+        audio.play().catch(()=>{});
+        playBtn.textContent='⏸';btn.classList.add('playing')
+      }else{
+        audio.pause();
+        playBtn.textContent='▶';btn.classList.remove('playing')
+      }
+    }
+    playBtn.onclick=togglePlay;
+    audio.onplay=()=>{playBtn.textContent='⏸';btn.classList.add('playing')};
+    audio.onpause=()=>{playBtn.textContent='▶';btn.classList.remove('playing')};
+    audio.ontimeupdate=()=>{fill.style.width=(audio.currentTime/audio.duration*100)+'%'};
+    bar.onclick=e=>{const r=bar.getBoundingClientRect();audio.currentTime=(e.clientX-r.left)/r.width*audio.duration};
+    vol.oninput=()=>{audio.volume=vol.value};
+    audio.volume=0.1;
+    nextBtn.onclick=()=>{loadTrack((currentTrack+1)%playlist.length);if(!audio.paused)audio.play()};
+    // show duration on metadata load
+    audio.onloadedmetadata=()=>{
+      const m=Math.floor(audio.duration/60),s=Math.floor(audio.duration%60);
+      document.querySelector('.track-artist').textContent+=` · ${m}:${s.toString().padStart(2,'0')}`
+    }
+  })();
+
+  // project accordion
+  (function(){
+    const items=document.querySelectorAll('.acc-item');
+    items.forEach(item=>{
+      const header=item.querySelector('.acc-header');
+      const body=item.querySelector('.acc-body');
+      // if open by default, set max-height
+      if(item.classList.contains('open')){body.style.maxHeight=body.scrollHeight+'px'}
+      header.onclick=()=>{
+        const isOpen=item.classList.contains('open');
+        // close all
+        items.forEach(i=>{i.classList.remove('open');i.querySelector('.acc-body').style.maxHeight='0'});
+        // toggle current
+        if(!isOpen){item.classList.add('open');body.style.maxHeight=body.scrollHeight+'px'}
+      }
+    });
+    // recalc max-height when children change (after fonts load etc)
+    setTimeout(()=>{document.querySelectorAll('.acc-item.open .acc-body').forEach(b=>{b.style.maxHeight=b.scrollHeight+'px'})},300)
+  })();
+</script>
+</body>
+</html>
