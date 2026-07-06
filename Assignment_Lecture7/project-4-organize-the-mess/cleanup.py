@@ -4,8 +4,12 @@ import shutil
 import sys
 from collections import defaultdict
 
-TARGET = "/home/tjamil/PROJECTS_FOLDER"
-BACKUP = "/home/tjamil/PROJECTS_FOLDER_BACKUP"
+if len(sys.argv) < 2 or sys.argv[1].startswith("-"):
+    print("Usage: python3 cleanup.py <target_folder> [--execute]")
+    sys.exit(1)
+
+TARGET = os.path.abspath(sys.argv[1])
+BACKUP = TARGET.rstrip("/") + "_BACKUP"
 DRY_RUN = "--execute" not in sys.argv
 
 def md5(path):
