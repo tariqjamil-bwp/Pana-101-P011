@@ -1,5 +1,8 @@
 import csv
+import os
 from collections import defaultdict
+
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 SCORES_FILE = "scores.csv"
 POLICY_FILE = "grading_policy.csv"

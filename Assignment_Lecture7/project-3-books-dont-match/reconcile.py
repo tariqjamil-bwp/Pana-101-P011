@@ -4,6 +4,8 @@ import re
 import os
 from difflib import SequenceMatcher
 
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
 RECORDS_FILE = "records.csv"
 KNOWN_FILE = "known_totals.csv"
 RULES_FILE = "rules.json"
