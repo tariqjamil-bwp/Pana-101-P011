@@ -1,0 +1,30 @@
+{
+  "name_mapping": {
+    "ali raza": "Ali Raza",
+    "ali r.": "Ali Raza",
+    "fati": "Fatima Ahmed",
+    "usman k": "Usman Khan",
+    "usman123": "Usman Khan",
+    "zainab ali": "Zainab Ali",
+    "hassan": "Hassan Mirza",
+    "ayesha n": "Ayesha Noor",
+    "bilal h": "Bilal Hussain",
+    "sara": "Sara Tariq",
+    "sarah": "Sara Tariq",
+    "omar farooq": "Omar Farooq",
+    "hina": "Hina Shafiq",
+    "anas": null
+  },
+  "known_contributors": [
+    "Ali Raza",
+    "Fatima Ahmed",
+    "Usman Khan",
+    "Zainab Ali",
+    "Hassan Mirza",
+    "Ayesha Noor",
+    "Bilal Hussain",
+    "Sara Tariq",
+    "Omar Farooq",
+    "Hina Shafiq"
+  ]
+}
