@@ -44,7 +44,4 @@ Assignment_Lecture8/
     └── screenshot.png                  # [Pending] The audited Skill in the directory
 ```
 
-## Remaining To-Do
 
-- [ ] Add screenshots for each task (private details blurred where applicable)
-- [ ] Push to GitHub
